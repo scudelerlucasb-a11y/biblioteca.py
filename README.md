@@ -22,7 +22,7 @@ Sistema de gerenciamento de biblioteca desenvolvido em Python com SQLite, execut
 Precisa apenas do Python 3 instalado. Não é necessário instalar bibliotecas externas.
 
 ```bash
-python nome_do_arquivo.py
+python biblioteca.py
 ```
 
 O banco de dados (`biblioteca.db`) é criado automaticamente na primeira execução, assim como suas tabelas e alguns registros iniciais para teste.
@@ -66,6 +66,69 @@ O projeto utiliza SQLite e possui 10 tabelas:
 | `emprestimo` | Registra os empréstimos e devoluções |
 | `reserva` | Armazena os registros de reserva |
 | `multa` | Registra os valores das multas e sua situação de pagamento |
+
+## 🧩 Modelo entidade-relacionamento
+
+```mermaid
+erDiagram
+    CATEGORIA ||--o{ LIVRO : classifica
+    LIVRO ||--o{ EXEMPLAR : possui
+    LIVRO ||--o{ LIVRO_AUTOR : "tem"
+    AUTOR ||--o{ LIVRO_AUTOR : "escreve"
+    SOCIO ||--o{ EMPRESTIMO : realiza
+    EXEMPLAR ||--o{ EMPRESTIMO : "é emprestado em"
+    FUNCIONARIO ||--o{ EMPRESTIMO : registra
+    EMPRESTIMO ||--o{ MULTA : gera
+    SOCIO ||--o{ RESERVA : faz
+    LIVRO ||--o{ RESERVA : "é reservado em"
+
+    CATEGORIA { int id PK
+        text genero UK
+        text bloco }
+    LIVRO { int id PK
+        text titulo
+        text tipo
+        int id_categoria FK }
+    AUTOR { int id PK
+        text nome
+        text email UK }
+    LIVRO_AUTOR { int id_livro PK,FK
+        int id_autor PK,FK }
+    EXEMPLAR { int id PK
+        text codigo UK
+        text estado
+        text status
+        int id_livro FK }
+    SOCIO { int id PK
+        text nome
+        text cpf UK
+        text data_nascimento
+        text telefone
+        text email
+        text data_cadastro }
+    FUNCIONARIO { int id PK
+        text nome
+        text cargo
+        text cracha UK
+        text bloco }
+    EMPRESTIMO { int id PK
+        text data_emprestimo
+        text data_prevista
+        text data_devolucao
+        int id_socio FK
+        int id_exemplar FK
+        int id_funcionario FK }
+    RESERVA { int id PK
+        text data_reserva
+        text ativa
+        int id_socio FK
+        int id_livro FK }
+    MULTA { int id PK
+        real valor
+        text pago
+        text data_geracao
+        int id_emprestimo FK }
+```
 
 ## 🧠 Competências praticadas
 
