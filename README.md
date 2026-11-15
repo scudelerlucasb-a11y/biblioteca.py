@@ -59,7 +59,7 @@ O projeto utiliza SQLite e possui 10 tabelas:
 | `categoria` | Armazena os gêneros e blocos dos livros |
 | `livro` | Armazena os livros físicos e digitais |
 | `autor` | Armazena os dados dos autores |
-| `livro_autor` | Relaciona livros e autores |
+| `livro_autor` | Relaciona livros e autores (muitos para muitos) |
 | `exemplar` | Controla os exemplares físicos e sua disponibilidade |
 | `socio` | Armazena os dados dos sócios |
 | `funcionario` | Armazena os funcionários e seus cargos |
@@ -73,8 +73,8 @@ O projeto utiliza SQLite e possui 10 tabelas:
 erDiagram
     CATEGORIA ||--o{ LIVRO : classifica
     LIVRO ||--o{ EXEMPLAR : possui
-    LIVRO ||--o{ LIVRO_AUTOR : "tem"
-    AUTOR ||--o{ LIVRO_AUTOR : "escreve"
+    LIVRO ||--o{ LIVRO_AUTOR : tem
+    AUTOR ||--o{ LIVRO_AUTOR : escreve
     SOCIO ||--o{ EMPRESTIMO : realiza
     EXEMPLAR ||--o{ EMPRESTIMO : "é emprestado em"
     FUNCIONARIO ||--o{ EMPRESTIMO : registra
@@ -82,53 +82,77 @@ erDiagram
     SOCIO ||--o{ RESERVA : faz
     LIVRO ||--o{ RESERVA : "é reservado em"
 
-    CATEGORIA { int id PK
+    CATEGORIA {
+        int id PK
         text genero UK
-        text bloco }
-    LIVRO { int id PK
+        text bloco
+    }
+    LIVRO {
+        int id PK
         text titulo
         text tipo
-        int id_categoria FK }
-    AUTOR { int id PK
+        int id_categoria FK
+    }
+    AUTOR {
+        int id PK
         text nome
-        text email UK }
-    LIVRO_AUTOR { int id_livro PK,FK
-        int id_autor PK,FK }
-    EXEMPLAR { int id PK
+        text email UK
+    }
+    LIVRO_AUTOR {
+        int id_livro PK, FK
+        int id_autor PK, FK
+    }
+    EXEMPLAR {
+        int id PK
         text codigo UK
         text estado
         text status
-        int id_livro FK }
-    SOCIO { int id PK
+        int id_livro FK
+    }
+    SOCIO {
+        int id PK
         text nome
         text cpf UK
         text data_nascimento
         text telefone
         text email
-        text data_cadastro }
-    FUNCIONARIO { int id PK
+        text data_cadastro
+    }
+    FUNCIONARIO {
+        int id PK
         text nome
         text cargo
         text cracha UK
-        text bloco }
-    EMPRESTIMO { int id PK
+        text bloco
+    }
+    EMPRESTIMO {
+        int id PK
         text data_emprestimo
         text data_prevista
         text data_devolucao
         int id_socio FK
         int id_exemplar FK
-        int id_funcionario FK }
-    RESERVA { int id PK
+        int id_funcionario FK
+    }
+    RESERVA {
+        int id PK
         text data_reserva
         text ativa
         int id_socio FK
-        int id_livro FK }
-    MULTA { int id PK
+        int id_livro FK
+    }
+    MULTA {
+        int id PK
         real valor
         text pago
         text data_geracao
-        int id_emprestimo FK }
+        int id_emprestimo FK
+    }
 ```
+
+## 🔎 Consultas de análise
+
+O arquivo [`consultas.sql`](consultas.sql) reúne consultas em SQL (com `JOIN` e `GROUP BY`) para analisar os dados, como livros mais emprestados, empréstimos atrasados, total de multas por sócio, empréstimos por categoria e empréstimos registrados por funcionário.
 
 ## 🧠 Competências praticadas
 
@@ -139,12 +163,18 @@ erDiagram
 - Criação de tabelas e relacionamentos entre entidades.
 - Chaves primárias (PK) e estrangeiras (FK).
 - Restrições de integridade (`UNIQUE`, `NOT NULL` e `CHECK`).
-- Consultas SQL com `SELECT`, `JOIN` e subconsultas.
+- Consultas SQL com `SELECT`, `JOIN`, `GROUP BY` e subconsultas.
 - Manipulação de registros com `INSERT` e `UPDATE`.
 - Exclusão em cascata com `ON DELETE CASCADE`.
 - Consultas parametrizadas (`?`).
 - Controle de transações com `commit()`.
 - Cálculo de datas utilizando funções do SQLite.
+
+## 🔮 Próximos passos
+
+- Criar a opção de menu para usar a tabela `reserva`, que já existe no banco, mas ainda não tem função no sistema.
+- Organizar o código em funções (por exemplo, `cadastrar_livro()` e `registrar_emprestimo()`).
+- Registrar o pagamento das multas (a tabela `multa` já tem o campo `pago`).
 
 ---
 
