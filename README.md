@@ -170,11 +170,6 @@ O arquivo [`consultas.sql`](consultas.sql) reúne consultas em SQL (com `JOIN` e
 - Controle de transações com `commit()`.
 - Cálculo de datas utilizando funções do SQLite.
 
-## 🔮 Próximos passos
-
-- Criar a opção de menu para usar a tabela `reserva`, que já existe no banco, mas ainda não tem função no sistema.
-- Organizar o código em funções (por exemplo, `cadastrar_livro()` e `registrar_emprestimo()`).
-- Registrar o pagamento das multas (a tabela `multa` já tem o campo `pago`).
 
 ---
 
